@@ -1,0 +1,38 @@
+# PROJECT — Exploits University Alumni Connect (frontend at P:\xoski\backend\alumni-connect-backend\frontend)
+
+## Objective
+Deliver a **LinkedIn-inspired professional profile experience (frontend only)** for Students and Alumni in the Exploits Alumni Connect System: header, tabs (About/Posts/Tagged/Activity/Experience/Education/Skills/Achievements/Connections), `@`-mention post composer, activity timeline, profile sidebar, view-mode (`/profile/:id`), mock data + reusable components, dynamic graduation years to at least 2035. Also: run the frontend dev server + community feed (both done).
+
+## Important Details
+- **Frontend-only / mock mode**: `src/api/mockMode.ts` has `MOCK_MODE = true`. Real backend at workspace root is NOT running (needs root `.env`: Firebase service account, Brevo, Cloudinary, `JWT_SECRET`, `INITIAL_ADMIN_*`). Vite dev server running at **http://localhost:5173/** (logs `%TEMP%\opencode\vite.log`), proxies `/api` + `/socket.io` → localhost:5000 (ws proxy ECONNREFUSED errors in log are expected — socket.io proxy to dead backend).
+- **Do NOT clone LinkedIn** — LinkedIn-inspired UX; use Exploits brand tokens: `brand-primary #27155f`, `primaryLight #3a2080`, `primaryDark #180d3d`, `brand-red #e40d0a`.
+- **Graduation years**: `src/lib/gradYears.ts` — BASE_YEAR 1990, max = `max(currentYear()+9, 2035)`; students `expectedGraduationYears()` (current→max), alumni `alumniGraduationYears()` (1990→current). Registration (`MultiStepRegistration.tsx`), profile edit modal, and admin analytics filter (`mockAnalytics.ts:198 ANALYTICS_FILTER_OPTIONS.graduationYears = GRADUATION_YEARS`) all dynamic.
+- **Tagging**: `TagUserInput` embeds `@Name` in post text; `getTaggedPostsApi` = seeded tagged posts + live `MOCK_POSTS` containing `@Name` (composer→tagged works live).
+- **View mode**: `getProfileApi(userId?)` resolves other mock users; `getConnectionStatusApi` (OUTGOING_REQUESTS Set + seeded accepted alu-1..3/std-1..3) and `requestConnectionStatusApi` drive Connect/Request-sent/Connected.
+- Strict TS (`noUnusedLocals`, `verbatimModuleSyntax`, `react-refresh/only-export-components`). `PostComment` is the comment type.
+- Demo creds: `admin@exploits.ac.zw`/`admin123`, `student1@exploits.ac.zw`/`student123`; OTP `482913`.
+- **ESLint**: `set-state-in-effect` is a hard error — never call setState synchronously inside an effect. Accepted codebase pattern: initialize `loading` to `true`, all setState inside `.then/.finally` (e.g. `AlumniDashboard.tsx`), and `useEffect(() => { void reload(); }, [userId])` where `reload` is `useCallback` with NO sync setState → only yields non-failing `exhaustive-deps` warning (FeedPage ships the same warning). `react-refresh/only-export-components` error if a component file also exports a value (use camelCase value exports in same file only if allowed; types are fine).
+- Pre-existing (NOT from this work): lint errors in `notification.ts` (no-explicit-any), NotificationBell, Sidebar setState-in-effect, AuthContext default export, JobsPage, MessagingPage, SocketContext; chunk-size/browserslist build warnings.
+
+## Work State
+### Completed (all verified: `npx tsc -b` clean, eslint clean except pre-existing, `npm run build` OK, dev server HTTP 200)
+- Feed feature: `src/pages/FeedPage.tsx`, route `/feed`, Sidebar "Community" (IconFeed), dashboard links, `timeAgo.ts`, postApi identity.
+- Profile backbone: `src/types/profile.ts` (all profile types; `ProfileTabId` lives in ProfileTabs.tsx), `src/types/directory.ts` now has `program?: string`, `src/types/user.ts` extended (headline, location, coverPhoto, website, industry, yearsOfExperience, careerGoals, experiences, achievements), `src/lib/gradYears.ts`, dynamic GRADUATION_YEARS in `departments.ts`, `src/data/mockProfiles.ts` (builders + computeProfileCompletion + headlineFor/locationFor + COMMON_SKILLS + CURRENT_YEAR exported), `src/api/profileApi.ts` (entire service incl. OUTGOING_REQUESTS, changeProfilePhotoApi object URL), `src/api/userApi.ts` — `getProfileApi(userId?)` mock resolves MOCK_USERS/MOCK_PROFILES, `updateProfileApi` payload now includes all new editable fields AND type-imports `ProfileExperience`/`ProfileAchievement`.
+- Profile components `src/components/profile/` (all, incl. `index.ts` barrel): ProfileHeader (cover/avatar/grad label/status actions), ProfileTabs (ProfileTabId exported; PROFILE_TABS const removed), ProfileAbout, PostComposer, PostCard, ProfilePostsSection, TaggedPostsSection, ActivityTimeline, ExperienceSection (add/edit/delete modal, sorted by startDate via generic sanitizeOrder), EducationSection, SkillsSection (add/remove + suggestion chips, persists updateProfileApi), AchievementsSection (add/delete + save, grid cards), ConnectionsGrid (Message/View Profile/Remove, links to /profile/:id), ProfileSidebar (completion bar + People You May Know + Similar Professionals), ProfilePhotoModal, EditProfileModal (headline/location/contact/bio/professional/student fields, grad year select uses graduationYearOptions), TagUserInput.
+- `src/pages/ProfilePage.tsx` fully rewritten: own view (full editing) vs `/profile/:userId` view mode (Connect/Message), tabs grid + sticky sidebar (desktop right rail, mobile below), admin own-profile fallback (AdminProfile), ProfilePhotoModal + EditProfileModal wiring, counts badges, reload-all on activity changes. Routes `/profile` + `/profile/:userId` registered in `App.tsx`.
+- Connection/view links: ConnectionsGrid rows → `/profile/:id`.
+- Branding: Exploits logo (`/Logo.png`) now shows on every page — topbar (`Navbar.tsx`) + sidebar logo chip (white chip on dark navy). Removed `IconGradCap` (graduation-cap "wisdom hat") and the old "Alumni Connect" wordmark from the sidebar; also fixed the pre-existing Sidebar `set-state-in-effect` lint error.
+
+### Active / Blocked
+- None technically. Backend unusable without `.env` secrets (only matters if wiring real API later).
+
+## Next Move
+1. Optional polish: chunk code-split (build warns >500 kB), add "/profile/:id" links on dashboard/directory cards (directory already uses DirectoryUser rows).
+2. For real backend: implement `PUT /profile/update` (experiences/achievements/cover), `/profile/static/media` `/users/:id/tagged-posts` `/connections/request` endpoints and DB models — out of scope for frontend-only requirement.
+3. Summarize to the user.
+
+## Relevant Files
+- Components: `src/components/profile/*` (index.ts barrel).
+- Page/routing: `src/pages/ProfilePage.tsx`, `src/App.tsx` (routes /profile, /profile/:userId, /feed).
+- API/data/types: `src/api/profileApi.ts`, `src/api/userApi.ts`, `src/api/postApi.ts`, `src/data/mockProfiles.ts`, `src/data/mockUsers.ts`, `src/data/departments.ts`, `src/data/mockAnalytics.ts`, `src/types/profile.ts`, `src/types/directory.ts`, `src/types/user.ts`, `src/lib/gradYears.ts`.
+- Auth/registration: `src/components/auth/MultiStepRegistration.tsx`, `src/context/AuthContext.tsx` (updateStoredUser, getProfileApi).
