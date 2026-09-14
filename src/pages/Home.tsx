@@ -166,7 +166,7 @@ const Home = () => {
               className="h-9 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 shrink-0"
             />
             <span
-              className={`hidden sm:block text-xl font-bold tracking-tight transition-colors duration-300 truncate ${
+              className={`text-xl font-bold tracking-tight transition-colors duration-300 truncate ${
                 scrolled ? "text-[#1e3a6e]" : "text-white"
               }`}
             >
