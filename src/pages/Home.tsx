@@ -158,37 +158,31 @@ const Home = () => {
             : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group min-w-0">
             <img
-              src="/Logo.png"
+              src="/Logo-icon.png"
               alt="Alumni Connect Logo"
-              className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-9 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 shrink-0"
             />
             <span
-              className={`text-xl font-bold tracking-tight transition-colors duration-300 ${
+              className={`hidden sm:block text-xl font-bold tracking-tight transition-colors duration-300 truncate ${
                 scrolled ? "text-[#1e3a6e]" : "text-white"
               }`}
             >
               Alumni Connect
             </span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             <Link
               to="/login"
-              className={`text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300 ${
+              className={`text-sm font-medium px-3 py-2 sm:px-4 rounded-lg transition-all duration-300 whitespace-nowrap ${
                 scrolled
                   ? "text-[#1e3a6e] hover:bg-[#1e3a6e]/10"
                   : "text-white/90 hover:text-white hover:bg-white/10"
               }`}
             >
               Log In
-            </Link>
-            <Link
-              to="/register"
-              className="bg-[#d2621a] hover:bg-[#b85516] text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-            >
-              Get Started
             </Link>
           </div>
         </div>

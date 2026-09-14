@@ -193,8 +193,8 @@ const SidebarContent = ({
       <div className="flex items-center gap-2.5">
         <span className="rounded-lg bg-white p-1.5 leading-none">
           <img
-            src="/Logo.png"
-            alt="Exploits University Alumni Connect"
+            src="/Logo-icon.png"
+            alt="Exploits University Alumni Connect icon"
             className="h-8 w-auto object-contain"
           />
         </span>

@@ -58,10 +58,10 @@ const Navbar = ({
           </svg>
         </button>
 
-        {/* Exploits logo — visible on every page */}
+        {/* Exploits logo icon — visible on every page */}
         <img
-          src="/Logo.png"
-          alt="Exploits University"
+          src="/Logo-icon.png"
+          alt="Exploits University icon"
           className="h-8 w-auto object-contain shrink-0"
         />
         <div className="hidden sm:block h-6 w-px bg-gray-200 shrink-0" />
