@@ -185,7 +185,7 @@ const SidebarContent = ({
     className={`bg-[#1e3a6e] flex flex-col ${
       variant === "desktop"
         ? "w-full h-full"
-        : "w-full max-h-[calc(100vh-3.5rem)] overflow-y-auto shadow-2xl"
+        : "w-full max-h-[calc(100vh-5rem)] overflow-y-auto rounded-2xl shadow-2xl ring-1 ring-black/5"
     }`}
   >
     {/* Logo — Exploits brand */}
@@ -322,13 +322,16 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
         />
       )}
 
-      {/* Mobile: menu drops down from the top bar (below the navbar) */}
+      {/* Mobile: menu drops from the upper-left corner, under the hamburger */}
       <div
-        className={`md:hidden fixed left-0 right-0 top-14 z-40 transition-transform duration-300 ease-in-out origin-top ${
-          open ? "translate-y-0" : "-translate-y-full"
+        className={`md:hidden fixed left-4 top-16 z-40 w-[19rem] max-w-[calc(100vw-2rem)] transition-all duration-200 ease-out origin-top-left ${
+          open
+            ? "opacity-100 translate-y-0 scale-100"
+            : "opacity-0 -translate-y-2 scale-95 pointer-events-none"
         }`}
         aria-hidden={!open}
       >
+        <div className="absolute -top-2 left-6 h-4 w-4 rotate-45 bg-[#1e3a6e] ring-1 ring-black/5" />
         <SidebarContent {...sharedProps} variant="mobile" />
       </div>
     </>
