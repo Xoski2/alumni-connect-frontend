@@ -4,6 +4,11 @@ import { useAuth } from "../../context/AuthContext";
 import { AC_SOCKET_EVENT } from "../../context/SocketContext";
 import { getAlumniConnectionsApi } from "../../api/connectionApi";
 
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
+
 interface NavItem {
   label: string;
   path: string;
@@ -124,41 +129,6 @@ const IconLogout = () => (
     <line x1="21" y1="12" x2="9" y2="12" />
   </svg>
 );
-const IconChevronRight = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    viewBox="0 0 24 24"
-  >
-    <polyline points="9 18 15 12 9 6" />
-  </svg>
-);
-const IconChevronLeft = () => (
-  <svg
-    className="w-4 h-4"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    viewBox="0 0 24 24"
-  >
-    <polyline points="15 18 9 12 15 6" />
-  </svg>
-);
-const IconMenu = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    viewBox="0 0 24 24"
-  >
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="18" x2="21" y2="18" />
-  </svg>
-);
 
 // ── Nav items point directly to role-specific paths ───────────────────────────
 // This avoids the /dashboard → /student/dashboard double-redirect flicker.
@@ -200,6 +170,7 @@ interface SidebarContentProps {
   pendingStudentRequests: number;
   onNavigate: () => void;
   onLogout: () => void;
+  variant: "desktop" | "mobile";
 }
 
 const SidebarContent = ({
@@ -208,8 +179,15 @@ const SidebarContent = ({
   pendingStudentRequests,
   onNavigate,
   onLogout,
+  variant,
 }: SidebarContentProps) => (
-  <aside className="w-64 min-h-screen bg-[#1e3a6e] flex flex-col h-full">
+  <aside
+    className={`bg-[#1e3a6e] flex flex-col ${
+      variant === "desktop"
+        ? "w-full h-full"
+        : "w-full max-h-[calc(100vh-3.5rem)] overflow-y-auto shadow-2xl"
+    }`}
+  >
     {/* Logo — Exploits brand */}
     <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
       <div className="flex items-center gap-2.5">
@@ -292,10 +270,9 @@ const SidebarContent = ({
   </aside>
 );
 
-// ── Sidebar shell (handles mobile state only) ─────────────────────────────────
-const Sidebar = () => {
+// ── Sidebar shell (handles mobile top-menu state) ─────────────────────────────
+const Sidebar = ({ open, onClose }: SidebarProps) => {
   const { user, logout } = useAuth();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [pendingStudentRequests, setPendingStudentRequests] = useState(0);
 
   useEffect(() => {
@@ -317,67 +294,42 @@ const Sidebar = () => {
         ? alumniNav
         : studentNav;
 
-  const closeOnMobile = () => setMobileOpen(false);
-
   const handleLogout = () => {
     logout();
-    closeOnMobile();
+    onClose();
   };
 
   const sharedProps = {
     user,
     navItems,
     pendingStudentRequests,
-    onNavigate: closeOnMobile,
+    onNavigate: onClose,
     onLogout: handleLogout,
   };
 
   return (
     <>
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — hidden below md; full-height fixed left column */}
       <div className="hidden md:flex fixed left-0 top-0 z-30 h-screen w-64">
-        <SidebarContent {...sharedProps} />
+        <SidebarContent {...sharedProps} variant="desktop" />
       </div>
 
-      {/* Mobile: collapsed tab */}
-      {!mobileOpen && (
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="md:hidden fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-[#1e3a6e] text-white px-1.5 py-4 rounded-r-xl shadow-lg flex flex-col items-center gap-2"
-          aria-label="Open sidebar"
-        >
-          <IconMenu />
-          <span className="text-[10px] font-semibold tracking-wide [writing-mode:vertical-lr] rotate-180">
-            MENU
-          </span>
-          <IconChevronRight />
-        </button>
-      )}
-
-      {/* Mobile: backdrop */}
-      {mobileOpen && (
+      {/* Mobile: backdrop behind the top menu */}
+      {open && (
         <div
-          className="md:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-          onClick={() => setMobileOpen(false)}
+          className="md:hidden fixed inset-0 z-30 bg-black/50 backdrop-blur-sm"
+          onClick={onClose}
         />
       )}
 
-      {/* Mobile: drawer */}
+      {/* Mobile: menu drops down from the top bar (below the navbar) */}
       <div
-        className={`md:hidden fixed left-0 top-0 z-50 h-full transition-transform duration-300 ease-in-out ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        className={`md:hidden fixed left-0 right-0 top-14 z-40 transition-transform duration-300 ease-in-out origin-top ${
+          open ? "translate-y-0" : "-translate-y-full"
         }`}
+        aria-hidden={!open}
       >
-        <div className="relative h-full">
-          <SidebarContent {...sharedProps} />
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="absolute top-1/2 -translate-y-1/2 -right-6 bg-[#1e3a6e] text-white px-1.5 py-4 rounded-r-xl shadow-lg flex items-center justify-center"
-            aria-label="Close sidebar"
-          >
-            <IconChevronLeft />
-          </button>
-        </div>
+        <SidebarContent {...sharedProps} variant="mobile" />
       </div>
     </>
   );
