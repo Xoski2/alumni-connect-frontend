@@ -103,7 +103,7 @@ export function EditProfileModal({ profile, onClose, onSaved }: EditProfileModal
                 <input value={form.headline} onChange={(e) => field("headline")(e.target.value)} className={inputCls} placeholder={isStudent ? `Student · ${u.program} · ${u.department ?? "Exploits University"}` : `${u.position ?? "Professional"} at ${u.company ?? "your company"}`} />
               </EditField>
               <EditField label="Location">
-                <input value={form.location} onChange={(e) => field("location")(e.target.value)} className={inputCls} placeholder="e.g. Harare, Zimbabwe" />
+                <input value={form.location} onChange={(e) => field("location")(e.target.value)} className={inputCls} placeholder="e.g. Lilongwe, Malawi" />
               </EditField>
               <EditField label="Phone">
                 <input value={form.phone} onChange={(e) => field("phone")(e.target.value)} className={inputCls} placeholder="+263 ..." />

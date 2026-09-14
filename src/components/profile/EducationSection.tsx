@@ -24,7 +24,7 @@ export function EducationSection({ education }: { education: ProfileEducation[] 
               <p className="font-semibold text-foreground">{edu.institution}</p>
               <p className="text-sm text-foreground/85">{edu.programme}</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {[edu.department, edu.campus ? `${edu.campus}, Zimbabwe` : ""]
+                {[edu.department, edu.campus ? `${edu.campus}, Malawi` : ""]
                   .filter(Boolean)
                   .join(" · ")}
               </p>

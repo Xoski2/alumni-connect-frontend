@@ -71,7 +71,7 @@ const AdminDashboard = () => {
   const engagement = dataset.engagement;
 
   return (
-    <PageContainer title="Admin Console">
+    <PageContainer title="Admin Console" showLogo>
       <div className="space-y-6">
         {/* Hero */}
         <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-primaryDark via-brand-primary to-brand-primaryLight p-6 text-white shadow-lg sm:p-8">

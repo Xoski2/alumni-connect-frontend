@@ -150,9 +150,9 @@ export function getAnalyticsDataset(filters: AnalyticsFilters = {}): AnalyticsDa
       count: universalCount(48, i + y),
     })),
     campusDistribution: [
-      { name: "Bulawayo", value: 380 + universalCount(300, 1) },
-      { name: "Harare", value: 240 + universalCount(180, 2) },
-      { name: "Midlands", value: 98 + universalCount(80, 3) },
+      { name: "Blantyre", value: 380 + universalCount(300, 1) },
+      { name: "Lilongwe", value: 240 + universalCount(180, 2) },
+      { name: "Mzuzu", value: 98 + universalCount(80, 3) },
     ],
     engagement: {
       posts: 42 + universalCount(20, 1),
@@ -192,7 +192,7 @@ function iif(cond: boolean, v: number): number {
 }
 
 export const ANALYTICS_FILTER_OPTIONS = {
-  campuses: ["Bulawayo", "Harare", "Midlands"],
+  campuses: ["Blantyre", "Lilongwe", "Mzuzu"],
   entryTypes: ["National Entry", "Parallel Entry", "Distance Learning"],
   entryYears: ENTRY_YEARS,
   graduationYears: GRADUATION_YEARS,

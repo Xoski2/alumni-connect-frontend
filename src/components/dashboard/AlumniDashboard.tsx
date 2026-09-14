@@ -94,7 +94,7 @@ const AlumniDashboardPage = () => {
   const peopleYouMayKnow = MOCK_ALUMNI.filter((a) => a._id !== profile?._id).slice(0, 4);
 
   return (
-    <PageContainer title="Alumni Dashboard">
+    <PageContainer title="Alumni Dashboard" showLogo>
       <div className="space-y-6">
         {/* Hero */}
         <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-primaryDark via-brand-primary to-brand-primaryLight p-6 text-white shadow-lg sm:p-8">

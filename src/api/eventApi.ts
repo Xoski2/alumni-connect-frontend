@@ -25,7 +25,7 @@ export async function createEventApi(data: Partial<Event>): Promise<Event> {
       title: data.title ?? "New Event",
       description: data.description ?? "",
       eventDate: data.eventDate ?? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      location: data.location ?? "Bulawayo Campus",
+      location: data.location ?? "Blantyre Campus",
       organizer: {
         _id: data.organizer?._id ?? "adm-1",
         name: data.organizer?.name ?? "Dr. Sibusiso Moyo",
@@ -103,7 +103,7 @@ const MOCK_PARTICIPANTS: EventParticipantsResponse[] = [
     eventId: "evt-1",
     title: "Career Fair 2026",
     eventDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString(),
-    location: "Bulawayo Campus — Main Hall",
+    location: "Blantyre Campus — Main Hall",
     total: 7,
     participants: [
       { _id: "std-1", name: "Tapiwa Moyo", email: "student1@exploits.ac.zw", role: "student", phone: "+263 773 111 222", profilePhoto: "", graduationYear: "2027", university: "Exploits University", company: "", position: "" },

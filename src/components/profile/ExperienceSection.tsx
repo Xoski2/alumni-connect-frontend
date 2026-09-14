@@ -228,7 +228,7 @@ function ExperienceForm({
               </select>
             </Field>
             <Field label="Location">
-              <input value={form.location ?? ""} onChange={(e) => field("location")(e.target.value)} className={inputCls} placeholder="e.g. Harare, Zimbabwe" />
+              <input value={form.location ?? ""} onChange={(e) => field("location")(e.target.value)} className={inputCls} placeholder="e.g. Lilongwe, Malawi" />
             </Field>
           </div>
 

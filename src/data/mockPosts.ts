@@ -117,7 +117,7 @@ export const MOCK_POSTS: Post[] = [
       graduationYear: "2021",
     },
     category: "Event",
-    text: "Hosting a Git & GitHub bootcamp at the Midlands campus lab this Friday 5PM. Bring a laptop. We'll cover branching, PRs and fixing merge conflicts with real repos.",
+    text: "Hosting a Git & GitHub bootcamp at the Mzuzu campus lab this Friday 5PM. Bring a laptop. We'll cover branching, PRs and fixing merge conflicts with real repos.",
     likes: ["std-3", "std-7", "std-8", "alu-8"],
     comments: [
       {
@@ -141,7 +141,7 @@ export const MOCK_POSTS: Post[] = [
       graduationYear: "2019",
     },
     category: "Job",
-    text: "Marketing Assistant internship with Unilever now open — 12 months, Bulawayo office, real campaign ownership. Students encouraged to apply before the 40-day deadline. Link in my profile.",
+    text: "Marketing Assistant internship with Unilever now open — 12 months, Blantyre office, real campaign ownership. Students encouraged to apply before the 40-day deadline. Link in my profile.",
     likes: ["std-11", "std-5"],
     comments: [],
     createdAt: ago(3),

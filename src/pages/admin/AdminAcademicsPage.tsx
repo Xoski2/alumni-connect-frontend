@@ -146,7 +146,7 @@ const AdminAcademicsPage = () => {
                 </div>
               ) : (
                 <p className="mt-3 text-sm text-destructive">
-                  Format: PROGRAMME/ENTRYYEAR/CAMPUS/MODE/SEQ (e.g. BCS/24/HN/PE/001)
+                  Format: PROGRAMME/ENTRYYEAR/CAMPUS/MODE/SEQ (e.g. BCS/24/LL/PE/001)
                 </p>
               )}
             </div>

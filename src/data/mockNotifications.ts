@@ -66,7 +66,7 @@ export const MOCK_NOTIFICATIONS: Notification[] = [
     userId: "alu-1",
     type: "event_reminder",
     title: "Event reminder",
-    message: "Git & GitHub Bootcamp starts tomorrow at Midlands Campus.",
+    message: "Git & GitHub Bootcamp starts tomorrow at Mzuzu Campus.",
     data: { eventId: "evt-5", eventTitle: "Git & GitHub Bootcamp", eventDate: ago(96) },
     read: true,
     actionUrl: "/events",

@@ -188,19 +188,6 @@ const SidebarContent = ({
         : "w-full max-h-[calc(100vh-5rem)] overflow-y-auto rounded-2xl shadow-2xl ring-1 ring-black/5"
     }`}
   >
-    {/* Logo — Exploits brand */}
-    <div className="flex items-center justify-between px-5 py-5 border-b border-white/10">
-      <div className="flex items-center gap-2.5">
-        <span className="rounded-lg bg-white p-1.5 leading-none">
-          <img
-            src="/Logo-icon.png"
-            alt="Exploits University Alumni Connect icon"
-            className="h-8 w-auto object-contain"
-          />
-        </span>
-      </div>
-    </div>
-
     {/* User info */}
     <Link
       to="/profile"

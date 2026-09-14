@@ -105,7 +105,7 @@ export async function getDirectoryFilterOptionsApi(): Promise<FilterOptions> {
     return {
       departments: DEPARTMENTS.map((d) => d.name),
       skills: SKILL_POOL,
-      locations: ["Harare", "Bulawayo", "Midlands", "Virtual"],
+      locations: ["Blantyre", "Lilongwe", "Mzuzu", "Virtual"],
     };
   }
   try {

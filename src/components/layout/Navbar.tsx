@@ -6,6 +6,7 @@ interface NavbarProps {
   sidebarWidth?: string; // optional, default "left-64"
   isSidebarOpen?: boolean;
   onMenuClick?: () => void;
+  showLogo?: boolean;
 }
 
 const Navbar = ({
@@ -13,6 +14,7 @@ const Navbar = ({
   sidebarWidth = "lg:left-64",
   isSidebarOpen,
   onMenuClick,
+  showLogo = false,
 }: NavbarProps) => {
   const { user } = useAuth();
 
@@ -58,13 +60,17 @@ const Navbar = ({
           </svg>
         </button>
 
-        {/* Exploits logo icon — visible on every page */}
-        <img
-          src="/Logo-icon.png"
-          alt="Exploits University icon"
-          className="h-8 w-auto object-contain shrink-0"
-        />
-        <div className="hidden sm:block h-6 w-px bg-gray-200 shrink-0" />
+        {/* Exploits logo icon — only on pages that opt in */}
+        {showLogo && (
+          <>
+            <img
+              src="/Logo-icon.png"
+              alt="Exploits University icon"
+              className="h-8 w-auto object-contain shrink-0"
+            />
+            <div className="h-6 w-px bg-gray-200 shrink-0" />
+          </>
+        )}
 
         <h1 className="text-gray-800 font-semibold text-sm sm:text-base truncate">
           {title}

@@ -13,9 +13,9 @@ export interface Campus {
 }
 
 export const CAMPUSES: Campus[] = [
-  { code: "BT", name: "Bulawayo Campus" },
-  { code: "HN", name: "Harare Campus" },
-  { code: "MD", name: "Midlands Campus" },
+  { code: "BT", name: "Blantyre Campus" },
+  { code: "LL", name: "Lilongwe Campus" },
+  { code: "MZ", name: "Mzuzu Campus" },
 ];
 
 export interface StudyMode {

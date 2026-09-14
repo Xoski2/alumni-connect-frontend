@@ -86,7 +86,7 @@ export function buildProfileExperiences(user: User): ProfileExperience[] {
         title: user.position,
         company: user.company,
         employmentType: "Full-time",
-        location: user.location || "Harare, Zimbabwe",
+        location: user.location || "Lilongwe, Malawi",
         startDate: `${Math.max(Number(user.graduationYear) || CURRENT_YEAR - 3, CURRENT_YEAR - 6)}-01`,
         current: true,
         description: `${user.position} role growing end-to-end impact at ${user.company}.`,
@@ -97,7 +97,7 @@ export function buildProfileExperiences(user: User): ProfileExperience[] {
       title: ENTRY_TITLES[user.program ?? ""] ?? "Graduate Trainee",
       company: ENTRY_COMPANIES[(user._id.length + (user.program?.length ?? 0)) % ENTRY_COMPANIES.length],
       employmentType: "Full-time",
-      location: "Harare, Zimbabwe",
+      location: "Lilongwe, Malawi",
       startDate: `${Number(user.graduationYear) || CURRENT_YEAR - 5}-07`,
       endDate: `${(Number(user.graduationYear) || CURRENT_YEAR - 5) + 2}-12`,
       current: false,
@@ -108,7 +108,7 @@ export function buildProfileExperiences(user: User): ProfileExperience[] {
       title: `${user.program ?? "BIT"} Intern`,
       company: ENTRY_COMPANIES[(user._id.length + 3) % ENTRY_COMPANIES.length],
       employmentType: "Internship",
-      location: "Bulawayo, Zimbabwe",
+      location: "Blantyre, Malawi",
       startDate: `${Math.max((Number(user.graduationYear) || CURRENT_YEAR) - 1, CURRENT_YEAR - 7)}-05`,
       endDate: `${Math.max((Number(user.graduationYear) || CURRENT_YEAR) - 1, CURRENT_YEAR - 7)}-08`,
       current: false,
@@ -120,7 +120,7 @@ export function buildProfileExperiences(user: User): ProfileExperience[] {
       title: `${user.program ?? "BIT"} Student`,
       company: "Exploits University",
       employmentType: "Full-time",
-      location: campusFor(user) || "Bulawayo Campus",
+      location: campusFor(user) || "Blantyre Campus",
       startDate: `${(Number(user.graduationYear) || CURRENT_YEAR + 4) - 4}-08`,
       current: true,
       description: `Pursuing a 4-year degree in ${user.department ?? "Information Technology"}.`,
@@ -130,7 +130,7 @@ export function buildProfileExperiences(user: User): ProfileExperience[] {
       title: `${user.department ?? "IT"} Intern`,
       company: ENTRY_COMPANIES[(user._id.length + 2) % ENTRY_COMPANIES.length],
       employmentType: "Internship",
-      location: "Harare, Zimbabwe",
+      location: "Lilongwe, Malawi",
       startDate: `${CURRENT_YEAR - 1}-05`,
       endDate: `${CURRENT_YEAR - 1}-08`,
       current: false,
@@ -141,7 +141,7 @@ export function buildProfileExperiences(user: User): ProfileExperience[] {
       title: "Campus Ambassador",
       company: "Exploits University Student Guild",
       employmentType: "Part-time",
-      location: campusFor(user) || "Bulawayo Campus",
+      location: campusFor(user) || "Blantyre Campus",
       startDate: `${CURRENT_YEAR - 2}-02`,
       current: true,
       description: "Representing the faculty at open days and orientation, guiding new students.",
@@ -444,8 +444,8 @@ export function headlineFor(user: User): string {
 export function locationFor(user: User): string {
   if (user.location) return user.location;
   const campus = campusFor(user);
-  if (campus) return `${campus}, Zimbabwe`;
-  return "Harare, Zimbabwe";
+  if (campus) return `${campus}, Malawi`;
+  return "Lilongwe, Malawi";
 }
 
 export { COMMON_SKILLS, CURRENT_YEAR };

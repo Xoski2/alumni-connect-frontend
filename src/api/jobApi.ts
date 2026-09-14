@@ -26,7 +26,7 @@ export async function createJobApi(data: Partial<Job>): Promise<Job> {
       _id: id,
       title: data.title ?? "New Job",
       company: data.company ?? "Exploits University",
-      location: data.location ?? "Harare",
+      location: data.location ?? "Lilongwe",
       description: data.description ?? "",
       requirements: data.requirements ?? [],
       salary: data.salary,

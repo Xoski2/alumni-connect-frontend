@@ -95,7 +95,7 @@ const StudentDashboard = () => {
   );
 
   return (
-    <PageContainer title="Student Dashboard">
+    <PageContainer title="Student Dashboard" showLogo>
       <div className="space-y-6">
         {/* Hero */}
         <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primaryLight p-6 text-white shadow-lg sm:p-8">

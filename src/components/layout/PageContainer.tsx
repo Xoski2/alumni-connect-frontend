@@ -5,9 +5,10 @@ import Navbar from "./Navbar";
 interface PageContainerProps {
   title: string;
   children: React.ReactNode;
+  showLogo?: boolean;
 }
 
-const PageContainer = ({ title, children }: PageContainerProps) => {
+const PageContainer = ({ title, children, showLogo = false }: PageContainerProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -17,6 +18,7 @@ const PageContainer = ({ title, children }: PageContainerProps) => {
       <div className="min-w-0 flex-1 md:ml-64 flex flex-col">
         <Navbar
           title={title}
+          showLogo={showLogo}
           isSidebarOpen={mobileMenuOpen}
           onMenuClick={() => setMobileMenuOpen((o) => !o)}
         />

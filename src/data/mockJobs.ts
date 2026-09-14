@@ -10,7 +10,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-1",
     title: "Junior Software Engineer",
     company: "Old Mutual Zimbabwe",
-    location: "Harare",
+    location: "Lilongwe",
     description:
       "Join a growing engineering squad working on customer-facing insurance products. We value clean code, curiosity and mentorship.",
     requirements: ["JavaScript or TypeScript", "React", "Git", "Degree in a computing field"],
@@ -27,7 +27,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-2",
     title: "Data Analyst Intern",
     company: "Econet Wireless",
-    location: "Harare",
+    location: "Lilongwe",
     description:
       "Internship for current students and recent graduates interested in telecom data. Learn Python, SQL and dashboarding with a supportive team.",
     requirements: ["SQL basics", "Python basics", "Analytical mindset"],
@@ -44,7 +44,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-3",
     title: "Full-Stack Developer",
     company: "Delta Corporation",
-    location: "Bulawayo",
+    location: "Blantyre",
     description:
       "Ship web apps across our retail distribution network. Hybrid role with 2 remote days. TypeScript, React and Node on AWS.",
     requirements: ["TypeScript", "React/Next.js", "Node.js", "AWS basics"],
@@ -61,7 +61,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-4",
     title: "Graduate Auditor",
     company: "Deloitte Zimbabwe",
-    location: "Bulawayo",
+    location: "Blantyre",
     description:
       "Two-year graduate programme for accounting graduates preparing to sit for CA(Z). Rotate across audit, tax and advisory.",
     requirements: ["BSc Accounting or similar", "Strong analytical skills", "Attention to detail"],
@@ -78,7 +78,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-5",
     title: "Product Analyst",
     company: "Standard Bank",
-    location: "Harare",
+    location: "Lilongwe",
     description:
       "Help shape digital banking products using data. Build dashboards, run experiments and work closely with product managers.",
     requirements: ["SQL", "Excel", "Power BI or Tableau", "Finance interest"],
@@ -95,7 +95,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-6",
     title: "Cloud Support Engineer",
     company: "Liquid Intelligent Technologies",
-    location: "Harare",
+    location: "Lilongwe",
     description:
       "Support enterprise customers on AWS and Azure. Great first role for IT graduates with strong networking fundamentals.",
     requirements: ["Networking fundamentals", "Linux", "AWS/Azure cert a plus", "Customer support skills"],
@@ -112,9 +112,9 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-7",
     title: "Software Quality Engineer",
     company: "Mukuru",
-    location: "Harare",
+    location: "Lilongwe",
     description:
-      "Test remittance platforms and build automated suites. Remote-friendly with quarterly team meet-ups in Harare.",
+      "Test remittance platforms and build automated suites. Remote-friendly with quarterly team meet-ups in Lilongwe.",
     requirements: ["Test automation", "API testing", "CI/CD awareness"],
     salary: "US$800 – US$1,100 / month",
     deadline: daysFromNow(18),
@@ -129,7 +129,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-8",
     title: "Marketing Assistant (Brand)",
     company: "Unilever Zimbabwe",
-    location: "Bulawayo",
+    location: "Blantyre",
     description:
       "Twelve-month internship supporting the brand team with campaigns, digital content and consumer research.",
     requirements: ["Marketing degree", "Creativity", "Social media fluency"],
@@ -146,7 +146,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-9",
     title: "Mobile Developer (Flutter)",
     company: "Zimbabwe Online",
-    location: "Bulawayo",
+    location: "Blantyre",
     description:
       "Build consumer apps with Flutter and Firebase. Startup pace with a mentor attached to every new hire.",
     requirements: ["Dart/Flutter", "REST APIs", "Firebase a plus"],
@@ -163,7 +163,7 @@ export const MOCK_JOBS: Job[] = [
     _id: "job-10",
     title: "Teaching Assistant — Computer Science",
     company: "Exploits University",
-    location: "Bulawayo",
+    location: "Blantyre",
     description:
       "Part-time TA role supporting lecturers with first-year practicals in programming and databases.",
     requirements: ["Strong programming", "Patience", "Availability during term"],
@@ -183,7 +183,7 @@ export const MOCK_INDEPENDENT_JOBS: Job[] = [
     _id: "job-11",
     title: "Frontend Developer",
     company: "CBZ Holdings",
-    location: "Harare",
+    location: "Lilongwe",
     description: "Build bank self-service portals with modern React tooling.",
     requirements: ["React", "CSS/Tailwind", "REST APIs"],
     salary: "US$1,000 – US$1,400 / month",
