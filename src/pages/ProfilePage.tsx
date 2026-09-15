@@ -32,6 +32,7 @@ import {
   ProfileTabs,
   ProfilePhotoModal,
   EditProfileModal,
+  ChangePasswordModal,
   TaggedPostsSection,
   ActivityTimeline,
   ExperienceSection,
@@ -71,6 +72,7 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
   const [photoMode, setPhotoMode] = useState<"profile" | "cover" | null>(null);
   const [editing, setEditing] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const reload = useCallback(async () => {
     if (!targetId) return;
@@ -170,6 +172,7 @@ const ProfilePage = () => {
             onEditProfile={() => setEditing(true)}
             onAddSection={handleAddSection}
             onChangePhoto={setPhotoMode}
+            onChangePassword={() => setShowPasswordModal(true)}
             onMessage={onMessage}
             onConnect={() => void connect()}
           />
@@ -296,6 +299,10 @@ const ProfilePage = () => {
           onClose={() => setEditing(false)}
           onSaved={onProfileChanged}
         />
+      )}
+
+      {isOwn && showPasswordModal && (
+        <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />
       )}
     </PageContainer>
   );

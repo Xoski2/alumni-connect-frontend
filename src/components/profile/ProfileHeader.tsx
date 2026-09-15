@@ -4,6 +4,7 @@ import {
   GraduationCap,
   LinkedinIcon,
   Loader2,
+  Lock,
   Mail,
   MapPin,
   MessageCircle,
@@ -24,6 +25,7 @@ interface ProfileHeaderProps {
   onEditProfile: () => void;
   onAddSection: (field: "experience" | "achievements" | "skills") => void;
   onChangePhoto: (mode: "profile" | "cover") => void;
+  onChangePassword?: () => void;
   onViewProfileSettings?: () => void;
   onConnect?: () => void;
   onMessage: () => void;
@@ -37,6 +39,7 @@ export function ProfileHeader({
   onEditProfile,
   onAddSection,
   onChangePhoto,
+  onChangePassword,
   onMessage,
   onConnect,
   connectPending,
@@ -172,6 +175,15 @@ export function ProfileHeader({
             >
               <Pencil className="h-4 w-4" /> Edit Profile
             </button>
+            {onChangePassword && (
+              <button
+                type="button"
+                onClick={onChangePassword}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-accent sm:w-auto"
+              >
+                <Lock className="h-4 w-4" /> Change Password
+              </button>
+            )}
             <AddSectionButton
               label="Experience"
               onClick={() => onAddSection("experience")}

@@ -12,6 +12,7 @@ export { ConnectionsGrid } from "./ConnectionsGrid";
 export { ProfileSidebar } from "./ProfileSidebar";
 export { ProfilePhotoModal } from "./ProfilePhotoModal";
 export { EditProfileModal } from "./EditProfileModal";
+export { ChangePasswordModal } from "./ChangePasswordModal";
 export { PostComposer } from "./PostComposer";
 export { PostCard } from "./PostCard";
 export { TagUserInput } from "./TagUserInput";
