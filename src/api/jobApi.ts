@@ -1,6 +1,6 @@
 import type { Job } from "../types";
 import { api, getErrorMessage } from "./client";
-import { MOCK_MODE, mockDelay, mockDelayFast } from "./mockMode";
+import { MOCK_MODE, mockDelay, mockDelayFast, mockIdentifiableUser } from "./mockMode";
 import { MOCK_JOBS, MOCK_INDEPENDENT_JOBS } from "../data";
 
 const ALL_JOBS = [...MOCK_JOBS, ...MOCK_INDEPENDENT_JOBS];
@@ -142,3 +142,67 @@ export const getJobStatsApi = async (): Promise<JobStats> => {
   );
   return data.stats;
 };
+
+// ── Job referrals (alumni → students) ─────────────────────────────────────────
+
+export interface JobReferral {
+  jobId: string;
+  studentId: string;
+  note: string;
+  referrerId: string;
+  createdAt: string;
+}
+
+const REFERRALS: JobReferral[] = [];
+
+function currentReferrerId(): string {
+  return mockIdentifiableUser()._id;
+}
+
+export async function referStudentApi(
+  jobId: string,
+  studentId: string,
+  note: string,
+): Promise<JobReferral> {
+  if (MOCK_MODE) {
+    await mockDelay();
+    const job = ALL_JOBS.find((j) => j._id === jobId);
+    if (!job) throw new Error("Job not found");
+    if (!job.applicants) job.applicants = [];
+    if (!job.applicants.includes(studentId)) job.applicants.push(studentId);
+    const ref: JobReferral = {
+      jobId,
+      studentId,
+      note,
+      referrerId: currentReferrerId(),
+      createdAt: new Date().toISOString(),
+    };
+    REFERRALS.push(ref);
+    return ref;
+  }
+  try {
+    const { data } = await api.post<JobReferral>(`/jobs/${jobId}/refer`, {
+      studentId,
+      note,
+    });
+    return data;
+  } catch (e) {
+    throw new Error(getErrorMessage(e, "Could not submit referral"));
+  }
+}
+
+/** True when the current user has already referred the given job. */
+export async function hasReferredApi(jobId: string): Promise<boolean> {
+  if (MOCK_MODE) {
+    const me = currentReferrerId();
+    return REFERRALS.some((r) => r.jobId === jobId && r.referrerId === me);
+  }
+  try {
+    const { data } = await api.get<{ referred: boolean }>(
+      `/jobs/${jobId}/refer-status`,
+    );
+    return data.referred;
+  } catch {
+    return false;
+  }
+}

@@ -23,6 +23,8 @@ import EventsPage from "./pages/EventsPage";
 import FeedPage from "./pages/FeedPage";
 import MessagingPage from "./pages/MessagingPage";
 import ProfilePage from "./pages/ProfilePage";
+import FindMentorPage from "./pages/FindMentorPage";
+import GroupsPage from "./pages/GroupsPage";
 import AlumniDirectoryPage from "./pages/student/AlumniDirectoryPage";
 import AlumniStudentsPage from "./pages/alumni/AlumniStudentsPage";
 // Admin pages
@@ -215,6 +217,24 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <MessagingPage />
+        </ProtectedRoute>
+      }
+    />
+
+    <Route
+      path="/mentors"
+      element={
+        <ProtectedRoute>
+          <FindMentorPage />
+        </ProtectedRoute>
+      }
+    />
+
+    <Route
+      path="/groups"
+      element={
+        <ProtectedRoute>
+          <GroupsPage />
         </ProtectedRoute>
       }
     />

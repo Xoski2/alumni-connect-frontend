@@ -27,9 +27,13 @@ interface ProfileHeaderProps {
   onChangePhoto: (mode: "profile" | "cover") => void;
   onChangePassword?: () => void;
   onViewProfileSettings?: () => void;
+  onToggleFollow?: () => void;
   onConnect?: () => void;
   onMessage: () => void;
   connectPending?: boolean;
+  followersCount?: number;
+  following?: boolean;
+  followingBusy?: boolean;
 }
 
 export function ProfileHeader({
@@ -43,6 +47,10 @@ export function ProfileHeader({
   onMessage,
   onConnect,
   connectPending,
+  followersCount,
+  following,
+  followingBusy,
+  onToggleFollow,
 }: ProfileHeaderProps) {
   const { user, headline, location, coverPhoto } = profile;
   const isStudent = profile.isStudent;
@@ -143,6 +151,10 @@ export function ProfileHeader({
                 connections
               </span>
               <span>
+                <strong className="font-bold text-foreground">{followersCount ?? 0}</strong>{" "}
+                followers
+              </span>
+              <span>
                 <strong className="font-bold text-foreground">{profile.profileCompletion}%</strong>{" "}
                 profile complete
               </span>
@@ -240,6 +252,19 @@ export function ProfileHeader({
                 Connect
               </button>
             )}
+            <button
+              type="button"
+              onClick={onToggleFollow}
+              disabled={followingBusy}
+              className={`inline-flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors sm:w-auto disabled:opacity-60 ${
+                following
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                  : "border-border text-foreground hover:bg-accent"
+              }`}
+            >
+              {following ? <UserCheck className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+              {following ? "Following" : "Follow"}
+            </button>
             <button
               type="button"
               onClick={onMessage}

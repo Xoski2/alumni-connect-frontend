@@ -104,6 +104,31 @@ const IconFeed = () => (
     <rect x="2" y="4" width="20" height="16" rx="2" />
   </svg>
 );
+const IconMentorship = () => (
+  <svg
+    className="w-5 h-5 shrink-0"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+  >
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+  </svg>
+);
+const IconGroups = () => (
+  <svg
+    className="w-5 h-5 shrink-0"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+  >
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
 const IconProfile = () => (
   <svg
     className="w-5 h-5 shrink-0"
@@ -137,6 +162,8 @@ const studentNav: NavItem[] = [
   { label: "Community", path: "/feed", icon: <IconFeed /> },
   { label: "Jobs", path: "/jobs", icon: <IconJobs /> },
   { label: "Events", path: "/events", icon: <IconEvents /> },
+  { label: "Groups", path: "/groups", icon: <IconGroups /> },
+  { label: "Mentors", path: "/mentors", icon: <IconMentorship /> },
   { label: "Messages", path: "/messages", icon: <IconMessages /> },
   { label: "Alumni", path: "/alumni", icon: <IconUsers /> },
   { label: "Profile", path: "/profile", icon: <IconProfile /> },
@@ -148,6 +175,8 @@ const alumniNav: NavItem[] = [
   { label: "Community", path: "/feed", icon: <IconFeed /> },
   { label: "Post Jobs", path: "/jobs", icon: <IconJobs /> },
   { label: "Events", path: "/events", icon: <IconEvents /> },
+  { label: "Groups", path: "/groups", icon: <IconGroups /> },
+  { label: "Mentorship", path: "/mentors", icon: <IconMentorship /> },
   { label: "Messages", path: "/messages", icon: <IconMessages /> },
   { label: "Students", path: "/students", icon: <IconUsers /> },
   { label: "Profile", path: "/profile", icon: <IconProfile /> },

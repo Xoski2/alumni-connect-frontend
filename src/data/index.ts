@@ -7,3 +7,4 @@ export * from "./mockMessages";
 export * from "./mockNotifications";
 export * from "./mockAnalytics";
 export * from "./mockProfiles";
+export * from "./mockGroups";

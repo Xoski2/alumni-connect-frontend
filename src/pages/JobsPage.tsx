@@ -6,8 +6,11 @@ import {
   createJobApi,
   applyJobApi,
   updateJobApi,
+  referStudentApi,
+  hasReferredApi,
 } from "../api/jobApi";
 import type { Job } from "../types";
+import { MOCK_STUDENTS } from "../data";
 
 export interface JobFormData {
   title: string;
@@ -126,12 +129,16 @@ export function JobDetailModal({
   onApply,
   userRole,
   onEdit,
+  onRefer,
+  referred,
 }: {
   job: Job;
   onClose: () => void;
   onApply: (id: string) => void;
   userRole?: string;
   onEdit?: (job: Job) => void;
+  onRefer?: () => void;
+  referred?: boolean;
 }) {
   const [applying, setApplying] = useState(false);
   const [applyError, setApplyError] = useState<string>("");
@@ -337,6 +344,15 @@ export function JobDetailModal({
           >
             Close
           </button>
+          {userRole === "alumni" && job.status === "approved" && onRefer && (
+            <button
+              onClick={onRefer}
+              disabled={referred}
+              className="flex-1 bg-brand-primary hover:bg-brand-primaryLight text-white font-semibold py-2.5 rounded-lg text-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {referred ? "Referred ✓" : "Refer a Student"}
+            </button>
+          )}
           {userRole === "student" && job.status === "approved" && (
             <button
               onClick={handleApply}
@@ -346,6 +362,116 @@ export function JobDetailModal({
               {applying ? "Applying..." : "Apply Now"}
             </button>
           )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Refer a Student Modal ──────────────────────────────────────────────────────
+export function ReferJobModal({
+  job,
+  onClose,
+  onReferred,
+}: {
+  job: Job;
+  onClose: () => void;
+  onReferred: () => void;
+}) {
+  const [studentId, setStudentId] = useState("");
+  const [note, setNote] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  const submit = async () => {
+    if (!studentId) {
+      setFormError("Select a student to refer.");
+      return;
+    }
+    setSubmitting(true);
+    setFormError("");
+    try {
+      await referStudentApi(job._id, studentId, note.trim());
+      onReferred();
+    } catch {
+      setFormError("Could not submit referral");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900">Refer a Student</h3>
+            <p className="mt-0.5 text-sm text-gray-500">
+              {job.title} — {job.company}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+            aria-label="Close"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <label className="mb-1 block text-sm font-semibold text-gray-700">
+          Student
+        </label>
+        <select
+          value={studentId}
+          onChange={(e) => setStudentId(e.target.value)}
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a6e]"
+        >
+          <option value="">Select a student…</option>
+          {MOCK_STUDENTS.map((s) => (
+            <option key={s._id} value={s._id}>
+              {s.name} — {s.program || s.department || "Student"}
+            </option>
+          ))}
+        </select>
+
+        <label className="mt-4 mb-1 block text-sm font-semibold text-gray-700">
+          Why should they be considered?{" "}
+          <span className="font-normal text-gray-400">(optional)</span>
+        </label>
+        <textarea
+          rows={3}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="e.g. Strong React skills and completed the Cloud Internship..."
+          className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a6e]"
+        />
+
+        {formError && (
+          <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2">
+            <p className="text-sm text-red-600">{formError}</p>
+          </div>
+        )}
+
+        <div className="mt-5 flex gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 rounded-lg border border-gray-300 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            disabled={submitting}
+            onClick={submit}
+            className="flex-1 rounded-lg bg-brand-primary py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-primaryLight disabled:opacity-60"
+          >
+            {submitting ? "Submitting..." : "Submit Referral"}
+          </button>
         </div>
       </div>
     </div>
@@ -754,6 +880,8 @@ const JobsPage = () => {
   const [showPostModal, setShowPostModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
+  const [referringJob, setReferringJob] = useState<Job | null>(null);
+  const [referredIds, setReferredIds] = useState<Set<string>>(new Set());
   const [submitting, setSubmitting] = useState(false);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("");
@@ -861,6 +989,15 @@ const JobsPage = () => {
       console.error("Application failed:", err);
       throw new Error(err.message || "Failed to submit application");
     }
+  };
+
+  const handleRefer = async (job: Job) => {
+    if ((await hasReferredApi(job._id)) && !referredIds.has(job._id)) {
+      setReferredIds((prev) => new Set(prev).add(job._id));
+      setSuccess("You already referred this job.");
+      return;
+    }
+    setReferringJob(job);
   };
 
   const filtered = jobs.filter((j) => {
@@ -1087,6 +1224,21 @@ const JobsPage = () => {
           onApply={handleApply}
           userRole={user?.role}
           onEdit={handleEditJob}
+          onRefer={() => void handleRefer(selectedJob)}
+          referred={referredIds.has(selectedJob._id)}
+        />
+      )}
+
+      {/* Refer a Student Modal */}
+      {referringJob && (
+        <ReferJobModal
+          job={referringJob}
+          onClose={() => setReferringJob(null)}
+          onReferred={() => {
+            setReferringJob(null);
+            setReferredIds((prev) => new Set(prev).add(referringJob._id));
+            setSuccess("Referral submitted! The student has been added as an applicant.");
+          }}
         />
       )}
 

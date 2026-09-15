@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Users } from "lucide-react";
 import {
   Heart,
   Loader2,
@@ -19,6 +19,7 @@ import {
   editPostApi,
   deletePostApi,
 } from "../api/postApi";
+import { getFollowingIdsApi } from "../api/followApi";
 import type { Post, PostCategory } from "../types";
 import { timeAgo } from "../lib/timeAgo";
 import {
@@ -54,6 +55,8 @@ const FeedPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"All" | PostCategory>("All");
+  const [followingOnly, setFollowingOnly] = useState(false);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
   const [expandedComments, setExpandedComments] = useState<Set<string>>(
     new Set(),
   );
@@ -76,6 +79,9 @@ const FeedPage = () => {
       .then(setPosts)
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load feed"))
       .finally(() => setLoading(false));
+    getFollowingIdsApi()
+      .then((ids) => setFollowingIds(new Set(ids)))
+      .catch(() => setFollowingIds(new Set()));
   };
 
   useEffect(() => {
@@ -84,9 +90,16 @@ const FeedPage = () => {
 
   const myId = user?._id ?? "alu-1";
   const visiblePosts = useMemo(() => {
-    if (filter === "All") return posts;
-    return posts.filter((p) => p.category === filter);
-  }, [posts, filter]);
+    if (filter !== "All") {
+      return posts.filter((p) => p.category === filter);
+    }
+    if (followingOnly) {
+      return posts.filter(
+        (p) => followingIds.has(p.author._id) || p.author._id === myId,
+      );
+    }
+    return posts;
+  }, [posts, filter, followingOnly, followingIds, myId]);
 
   const toggleComments = (id: string) => {
     setExpandedComments((prev) => {
@@ -245,6 +258,19 @@ const FeedPage = () => {
 
         {/* Category filter */}
         <div className="flex flex-wrap items-center gap-2">
+          <button
+            key="following"
+            type="button"
+            onClick={() => setFollowingOnly((v) => !v)}
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+              followingOnly
+                ? "bg-brand-red text-white"
+                : "border bg-card text-muted-foreground hover:bg-accent"
+            }`}
+          >
+            <Users className="h-3.5 w-3.5" />
+            {followingOnly ? "Showing people you follow" : "Following"}
+          </button>
           {(["All", ...SEED_CATEGORIES] as const).map((c) => (
             <button
               key={c}

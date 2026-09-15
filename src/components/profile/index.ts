@@ -16,3 +16,5 @@ export { ChangePasswordModal } from "./ChangePasswordModal";
 export { PostComposer } from "./PostComposer";
 export { PostCard } from "./PostCard";
 export { TagUserInput } from "./TagUserInput";
+export { FollowersSection } from "./FollowersSection";
+export { RecommendationsSection } from "./RecommendationsSection";

@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Plus, Wrench, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { Plus, ThumbsUp, Wrench, X } from "lucide-react";
 import { updateProfileApi } from "../../api/userApi";
+import { endorseSkillApi, getSkillEndorsementsApi, type SkillEndorsements } from "../../api/recommendationApi";
 import { COMMON_SKILLS } from "../../data";
 import type { User } from "../../types";
 import type { PublicProfile } from "../../types/profile";
@@ -17,6 +18,21 @@ export function SkillsSection({ profile, isOwn, onProfileChanged }: SkillsSectio
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState("");
   const [error, setError] = useState("");
+  const [endorsements, setEndorsements] = useState<SkillEndorsements>({});
+  const [endorsing, setEndorsing] = useState<string | null>(null);
+
+  const loadEndorsements = useCallback(() => {
+    if (isOwn || !profile.user._id) return;
+    try {
+      getSkillEndorsementsApi(profile.user._id)
+        .then(setEndorsements)
+        .catch(() => {});
+    } catch { /* silent */ }
+  }, [isOwn, profile.user._id]);
+
+  useEffect(() => {
+    void loadEndorsements();
+  }, [loadEndorsements]);
 
   const commit = (next: string[]) => {
     setSkills(next);
@@ -41,6 +57,16 @@ export function SkillsSection({ profile, isOwn, onProfileChanged }: SkillsSectio
   };
 
   const remove = (skill: string) => commit(skills.filter((s) => s !== skill));
+
+  const handleEndorse = async (skill: string) => {
+    if (endorsing) return;
+    setEndorsing(skill);
+    try {
+      const res = await endorseSkillApi(profile.user._id, skill);
+      setEndorsements((prev) => ({ ...prev, [res.skill]: res.count }));
+    } catch { /* silent */ }
+    setEndorsing(null);
+  };
 
   return (
     <section className="rounded-xl border bg-card p-5 shadow-sm">
@@ -102,24 +128,43 @@ export function SkillsSection({ profile, isOwn, onProfileChanged }: SkillsSectio
         />
       ) : (
         <div className="mt-3 flex flex-wrap gap-2">
-          {skills.map((skill) => (
-            <span
-              key={skill}
-              className="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/10 px-3 py-1.5 text-sm font-medium text-brand-primary"
-            >
-              {skill}
-              {isOwn && (
-                <button
-                  type="button"
-                  onClick={() => remove(skill)}
-                  className="rounded-full text-brand-primary/60 transition-colors hover:text-brand-red"
-                  aria-label={`Remove ${skill}`}
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              )}
-            </span>
-          ))}
+          {skills.map((skill) => {
+            const count = endorsements[skill] ?? 0;
+            return (
+              <span
+                key={skill}
+                className="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/10 px-3 py-1.5 text-sm font-medium text-brand-primary"
+              >
+                {skill}
+                {!isOwn && count > 0 && (
+                  <span className="inline-flex items-center gap-0.5 rounded-full bg-white/70 px-1.5 py-0.5 text-[10px] text-brand-primary">
+                    {count}
+                  </span>
+                )}
+                {!isOwn && (
+                  <button
+                    type="button"
+                    onClick={() => void handleEndorse(skill)}
+                    disabled={endorsing === skill}
+                    className="rounded-full text-brand-primary/60 transition-colors hover:text-emerald-600"
+                    title={`Endorse ${skill}`}
+                  >
+                    <ThumbsUp className="h-3.5 w-3.5" />
+                  </button>
+                )}
+                {isOwn && (
+                  <button
+                    type="button"
+                    onClick={() => remove(skill)}
+                    className="rounded-full text-brand-primary/60 transition-colors hover:text-brand-red"
+                    aria-label={`Remove ${skill}`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </span>
+            );
+          })}
         </div>
       )}
     </section>

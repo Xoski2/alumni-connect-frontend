@@ -1,6 +1,6 @@
 import type { Event } from "../types";
 import { api, getErrorMessage } from "./client";
-import { MOCK_MODE, mockDelay, mockDelayFast } from "./mockMode";
+import { MOCK_MODE, mockDelay, mockDelayFast, mockIdentifiableUser } from "./mockMode";
 import { MOCK_EVENTS } from "../data";
 
 export async function getEventsApi(): Promise<Event[]> {
@@ -62,9 +62,10 @@ export async function joinEventApi(id: string): Promise<void> {
   if (MOCK_MODE) {
     await mockDelayFast();
     const ev = MOCK_EVENTS.find((e) => e._id === id);
+    const me = mockIdentifiableUser()._id;
     if (ev) {
       if (!ev.participants) ev.participants = [];
-      if (!ev.participants.includes("alu-1")) ev.participants.push("alu-1");
+      if (!ev.participants.includes(me)) ev.participants.push(me);
     }
     return;
   }
@@ -72,6 +73,68 @@ export async function joinEventApi(id: string): Promise<void> {
     await api.post(`/events/${id}/join`);
   } catch (e) {
     throw new Error(getErrorMessage(e, "Failed to join event"));
+  }
+}
+
+export interface RsvpState {
+  rsvped: boolean;
+  count: number;
+}
+
+/** Toggles RSVP for the current user and returns the new state. */
+export async function toggleRsvpApi(id: string): Promise<RsvpState> {
+  if (MOCK_MODE) {
+    await mockDelayFast();
+    const ev = MOCK_EVENTS.find((e) => e._id === id);
+    const me = mockIdentifiableUser()._id;
+    if (!ev) return { rsvped: false, count: 0 };
+    if (!ev.participants) ev.participants = [];
+    const idx = ev.participants.indexOf(me);
+    if (idx >= 0) {
+      ev.participants.splice(idx, 1);
+      return { rsvped: false, count: ev.participants.length };
+    }
+    ev.participants.push(me);
+    return { rsvped: true, count: ev.participants.length };
+  }
+  try {
+    const { data } = await api.post<RsvpState>(`/events/${id}/rsvp`);
+    return data;
+  } catch (e) {
+    throw new Error(getErrorMessage(e, "Could not update RSVP"));
+  }
+}
+
+export async function isRsvpedApi(id: string): Promise<boolean> {
+  if (MOCK_MODE) {
+    const ev = MOCK_EVENTS.find((e) => e._id === id);
+    const me = mockIdentifiableUser()._id;
+    return ev?.participants?.includes(me) ?? false;
+  }
+  try {
+    const { data } = await api.get<{ rsvped: boolean }>(`/events/${id}/rsvp-status`);
+    return data.rsvped;
+  } catch {
+    return false;
+  }
+}
+
+/** Upcoming events the current user is registered to attend. */
+export async function getMyUpcomingEventsApi(): Promise<Event[]> {
+  if (MOCK_MODE) {
+    await mockDelayFast();
+    const me = mockIdentifiableUser()._id;
+    const now = Date.now();
+    return MOCK_EVENTS.filter(
+      (e) =>
+        e.participants?.includes(me) && new Date(e.eventDate).getTime() >= now,
+    ).sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
+  }
+  try {
+    const { data } = await api.get("/events/mine");
+    return Array.isArray(data) ? data : (data.events ?? []);
+  } catch (e) {
+    throw new Error(getErrorMessage(e, "Failed to load your events"));
   }
 }
 

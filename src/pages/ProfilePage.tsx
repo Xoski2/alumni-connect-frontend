@@ -25,6 +25,12 @@ import {
   requestConnectionStatusApi,
 } from "../api/profileApi";
 import {
+  getProfileFollowersApi,
+  getFollowingIdsApi,
+  isFollowingApi,
+  toggleFollowApi,
+} from "../api/followApi";
+import {
   ProfileAbout,
   ProfileHeader,
   ProfilePostsSection,
@@ -40,6 +46,8 @@ import {
   SkillsSection,
   AchievementsSection,
   ConnectionsGrid,
+  FollowersSection,
+  RecommendationsSection,
 } from "../components/profile";
 import type { ProfileTabId } from "../components/profile";
 import { Spinner } from "../components/shared";
@@ -62,6 +70,10 @@ const ProfilePage = () => {
   const [activity, setActivity] = useState<ProfileActivity[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("none");
   const [connectPending, setConnectPending] = useState(false);
+  const [followers, setFollowers] = useState<ProfileConnectionPresence[]>([]);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followBusy, setFollowBusy] = useState(false);
 
   const [postsCount, setPostsCount] = useState(0);
   const [taggedCount, setTaggedCount] = useState(0);
@@ -88,6 +100,8 @@ const ProfilePage = () => {
         posts,
         tagged,
         ach,
+        followersList,
+        following,
       ] = await Promise.all([
         getPublicProfileApi(targetId),
         getProfileSuggestionsApi(targetId),
@@ -97,6 +111,8 @@ const ProfilePage = () => {
         getProfilePostsApi(targetId),
         getTaggedPostsApi(targetId),
         getProfileAchievementsApi(targetId),
+        getProfileFollowersApi(targetId),
+        getFollowingIdsApi(),
       ]);
       setProfile(p);
       setSuggestions(sugg);
@@ -106,10 +122,13 @@ const ProfilePage = () => {
       setPostsCount(posts.length);
       setTaggedCount(tagged.length);
       setAchievementsCount(ach.length);
+      setFollowers(followersList);
+      setFollowingIds(new Set(following));
       if (!isOwn) {
         getConnectionStatusApi(targetId)
           .then(setConnectionStatus)
           .catch(() => setConnectionStatus("none"));
+        setIsFollowing(await isFollowingApi(targetId));
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load profile");
@@ -144,6 +163,17 @@ const ProfilePage = () => {
     navigate(targetId ? `/messages?user=${targetId}` : "/messages");
   };
 
+  const handleToggleFollow = async () => {
+    if (!targetId) return;
+    setFollowBusy(true);
+    try {
+      const res = await toggleFollowApi(targetId);
+      setIsFollowing(res.following);
+      void reload();
+    } catch { /* silent */ }
+    setFollowBusy(false);
+  };
+
   const handleAddSection = (field: "experience" | "achievements" | "skills") => {
     setActiveTab(field);
   };
@@ -175,6 +205,10 @@ const ProfilePage = () => {
             onChangePassword={() => setShowPasswordModal(true)}
             onMessage={onMessage}
             onConnect={() => void connect()}
+            onToggleFollow={() => void handleToggleFollow()}
+            followersCount={followers.length}
+            following={isFollowing}
+            followingBusy={followBusy}
           />
 
           {/* Tabs */}
@@ -186,6 +220,7 @@ const ProfilePage = () => {
               tagged: taggedCount,
               connections: connections.length,
               achievements: achievementsCount,
+              followers: followers.length,
             }}
           />
 
@@ -193,11 +228,17 @@ const ProfilePage = () => {
             {/* Main column */}
             <div className="min-w-0">
               {activeTab === "about" && (
-                <ProfileAbout
-                  profile={profile}
-                  isOwn={isOwn}
-                  onEdit={() => setEditing(true)}
-                />
+                <>
+                  <ProfileAbout
+                    profile={profile}
+                    isOwn={isOwn}
+                    onEdit={() => setEditing(true)}
+                  />
+                  <RecommendationsSection
+                    userId={targetId}
+                    isOwn={isOwn}
+                  />
+                </>
               )}
 
               {activeTab === "posts" && (
@@ -254,6 +295,18 @@ const ProfilePage = () => {
                   onRemove={(id) =>
                     setConnections((prev) => prev.filter((c) => c._id !== id))
                   }
+                />
+              )}
+
+              {activeTab === "followers" && (
+                <FollowersSection
+                  followers={followers}
+                  followingIds={followingIds}
+                  onToggleFollow={async (id) => {
+                    await toggleFollowApi(id);
+                    const next = await getFollowingIdsApi();
+                    setFollowingIds(new Set(next));
+                  }}
                 />
               )}
             </div>

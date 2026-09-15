@@ -7,6 +7,7 @@ import {
   PenSquare,
   Tag,
   Users,
+  UserPlus,
   Wrench,
 } from "lucide-react";
 
@@ -19,7 +20,8 @@ export type ProfileTabId =
   | "education"
   | "skills"
   | "achievements"
-  | "connections";
+  | "connections"
+  | "followers";
 
 interface TabDef {
   id: ProfileTabId;
@@ -37,6 +39,7 @@ const TABS: TabDef[] = [
   { id: "skills", label: "Skills", icon: <Wrench className="h-4 w-4" /> },
   { id: "achievements", label: "Achievements", icon: <Award className="h-4 w-4" /> },
   { id: "connections", label: "Connections", icon: <Users className="h-4 w-4" /> },
+  { id: "followers", label: "Followers", icon: <UserPlus className="h-4 w-4" /> },
 ];
 
 interface ProfileTabsProps {
