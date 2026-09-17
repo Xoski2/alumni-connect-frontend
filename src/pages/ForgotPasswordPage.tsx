@@ -24,9 +24,14 @@ const ForgotPasswordPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-6"
-      style={{ backgroundColor: "#7a9bbf" }}
+      className="min-h-screen flex flex-col items-center justify-center p-6"
+      style={{ backgroundColor: "#162d57" }}
     >
+      <img
+        src="/Logo.png"
+        alt="Exploits University Logo"
+        className="h-20 w-auto object-contain mb-6"
+      />
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg px-8 py-8">
         <h1 className="text-xl font-bold text-gray-900 text-center mb-2">
           Forgot password
