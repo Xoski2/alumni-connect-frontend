@@ -18,6 +18,7 @@ const Background: React.FC<BackgroundProps> = ({
           backgroundImage: `url(${imagePath})`,
         }}
       ></div>
+      <div className="fixed inset-0 bg-brand-primary/70 z-0"></div>
 
       {/* Content */}
       <div className="relative z-10">{children}</div>
