@@ -176,12 +176,17 @@ const Home = () => {
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             <Link
               to="/login"
-              className={`text-sm font-medium px-3 py-2 sm:px-4 rounded-lg transition-all duration-300 whitespace-nowrap ${
+              className={`rounded-xl border transition-all duration-300 whitespace-nowrap flex items-center gap-2 px-4 py-2 sm:px-5 shadow-lg backdrop-blur-md ${
                 scrolled
-                  ? "text-[#1e3a6e] hover:bg-[#1e3a6e]/10"
-                  : "text-white/90 hover:text-white hover:bg-white/10"
+                  ? "bg-white border-[#1e3a6e]/15 text-[#1e3a6e] hover:shadow-xl hover:-translate-y-0.5"
+                  : "bg-white/10 border-white/30 text-white hover:bg-white/20"
               }`}
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
               Log In
             </Link>
           </div>
