@@ -300,6 +300,24 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Login Card */}
+      <section className="relative z-10 -mt-16 px-6">
+        <AnimatedSection className="max-w-3xl mx-auto">
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Already a member?</h3>
+              <p className="text-gray-500">Log in to your account to continue building your alumni network and reaching your goals.</p>
+            </div>
+            <Link
+              to="/login"
+              className="bg-[#d2621a] hover:bg-[#b85516] text-white font-bold px-10 py-4 rounded-xl transition-all duration-300 shadow-xl hover:shadow-[#d2621a]/40 hover:-translate-y-1 text-lg whitespace-nowrap"
+            >
+              Log In
+            </Link>
+          </div>
+        </AnimatedSection>
+      </section>
+
       {/* Features Section */}
       <section className="py-24 px-6 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-6xl mx-auto">
